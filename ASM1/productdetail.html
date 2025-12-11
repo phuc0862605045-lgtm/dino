@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE OFICELOOK</title>
+    <link rel="stylesheet" href="style.css">
+   
+</head>
+<body>
+    <style>
+        
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.breadcrumb {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+/* Gallery Section */
+.gallery-section {
+    display: flex;
+    gap: 15px;
+}
+
+.thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 100px;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.thumbnail:hover,
+.thumbnail.active {
+    border-color: #333;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main-image {
+    flex: 1;
+    /* background: #f5f5f5; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+}
+
+.main-image img {
+    max-width: 100%;
+    max-height: 630px;
+    object-fit: contain;
+}
+
+/* Product Info Section */
+.product-info h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.product-code {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.wishlist {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+}
+
+.product-info {
+    position: relative;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Color Selection */
+.color-section {
+    margin-bottom: 30px;
+}
+
+.color-option {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    background: #d4b5a0;
+    border: 2px solid #ddd;
+    cursor: pointer;
+}
+
+/* Size Selection */
+.size-section {
+    margin-bottom: 20px;
+}
+
+.size-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.size-btn {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.size-btn:hover,
+.size-btn.active {
+    background: #333;
+    color: white;
+    border-color: #333;
+}
+
+.size-guide {
+    font-size: 13px;
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 15px;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-buy {
+    background: #ddd;
+    color: #333;
+}
+
+.btn-buy:hover {
+    background: #ccc;
+}
+
+.btn-cart {
+    background: #000;
+    color: white;
+}
+
+.btn-cart:hover {
+    background: #333;
+}
+
+/* Description Section */
+.description-section {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 2px solid #333;
+}
+
+.description-section h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.description-section p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+/* Gallery Section */
+.gallery-section {
+    display: flex;
+    gap: 20px;
+}
+
+/* Thumbnails Container */
+.thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Thumbnail Styles */
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.thumbnail:hover {
+    border-color: #333;
+    transform: scale(1.05);
+}
+
+.thumbnail.active {
+    border-color: #000;
+    border-width: 3px;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Main Image Container */
+.main-image {
+    width: 500px;
+    height: 600px;
+    /* border: 1px solid #ddd; */
+    border-radius: 8px;
+    overflow: hidden;
+    /* background-color: #f9f9f9; */
+}
+
+.main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+/* Product Container */
+.product-container {
+    display: flex;
+    gap: 40px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .gallery-section {
+        flex-direction: column-reverse;
+    }
+    
+    .thumbnails {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .main-image {
+        width: 100%;
+        height: 400px;
+    }
+    
+    .product-container {
+        flex-direction: column;
+    }
+}
+ /* Related Products Section */
+ .related-products {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid #ddd;
+}
+
+.related-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.related-title::before,
+.related-title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 100px;
+    height: 2px;
+    background: #333;
+}
+
+.related-title::before {
+    right: calc(50% + 200px);
+}
+
+.related-title::after {
+    left: calc(50% + 200px);
+}
+
+.related-grid {
+    margin: 0 300px;
+    width: 1042px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding-bottom:20px;
+}
+
+.related-product {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.related-product:hover {
+    transform: translateY(-10px);
+}
+
+.related-image {
+    width: 100%;
+    height: 450px;
+    background: #f5f5f5;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.related-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.related-product:hover .related-image img {
+    transform: scale(1.05);
+}
+
+.related-info h3 {
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.related-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .product-container {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-section {
+        flex-direction: column-reverse;
+    }
+
+    .thumbnails {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .thumbnail {
+        min-width: 80px;
+    }
+
+    .action-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .related-grid {
+        margin: 0 auto;
+        /* width: 1148px; */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+       
+    }
+
+    .related-title::before,
+    .related-title::after {
+        width: 50px;
+    }
+
+    .related-title::before {
+        right: calc(50% + 150px);
+    }
+
+    .related-title::after {
+        left: calc(50% + 150px);
+    }
+}
+
+@media (max-width: 992px) and (min-width: 769px) {
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+    </style>
+</body>
+</html>
+<!-- header -->
+<header>    
+    <div class="header-container">
+        <a href="#" class="logo">
+           <img src="./img/logo.png" alt="">
+            </svg>
+            
+        </a>
+        
+        <nav>
+            
+            <a href="index.html">TRANG CHỦ</a>
+            <a href="t-shisrt.html">ÁO</a>
+            <a href="trousers.html">QUẦN</a>
+            <a href="#">BÀI VIẾT</a>
+            <a href="about.html">VỀ CHÚNG TÔI</a>
+            <a href="#">BÀI VIẾT </a>
+            <a href="#">LIÊN HỆ</a>
+        </nav>
+
+        <div class="header-right">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input type="text" placeholder="Bạn đang tìm gì ?">
+            </div>
+            
+            <div class="icon-buttons">
+                    <!-- <button aria-label="Yêu thích">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </button> -->
+                <button aria-label="Tài khoản">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                    </svg>
+                </button>
+                <button aria-label="Giỏ hàng">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+<main class="product-detail-container">
+    <div class="breadcrumb">
+        Trang chủ | <span id="product-name-breadcrumb">Sản phẩm</span>
+    </div>
+
+    <div class="product-container">
+        <!-- Gallery Section -->
+        <div class="gallery-section">
+            <div class="thumbnails">
+                <div class="thumbnail active" onclick="changeImage(this)">
+                    <img src="img/main.png" alt="Thumbnail 1">
+                </div>
+                <div class="thumbnail" onclick="changeImage(this)">
+                    <img src="img/change1.png" alt="Thumbnail 2">
+                </div>
+                <div class="thumbnail" onclick="changeImage(this)">
+                    <img src="img/change2.png" alt="Thumbnail 3">
+                </div>
+            </div>
+            <div class="main-image">
+                <img id="mainImage" src="img/main.png" alt="Sản phẩm">
+            </div>
+        </div>
+
+            <!-- Product Info Section -->
+            <div class="product-info">
+                <div class="wishlist">♡</div>
+
+                <h1>Tên Sản Phẩm</h1>
+                <div class="product-code">Mã Sản Phẩm</div>
+                <div class="price">Giá</div>
+
+                <!-- Color Section -->
+                <div class="color-section">
+                    <div class="section-title">Màu sắc</div>
+                    <div class="color-option"></div>
+                </div>
+
+                <!-- Size Section -->
+                <div class="size-section">
+                    <div class="section-title">Kích cỡ:</div>
+                    <div class="size-options">
+                        <button class="size-btn" onclick="selectSize(this)">S</button>
+                        <button class="size-btn" onclick="selectSize(this)">M</button>
+                        <button class="size-btn" onclick="selectSize(this)">L</button>
+                        <button class="size-btn" onclick="selectSize(this)">XL</button>
+                    </div>
+                    <div class="size-guide">Hướng dẫn chọn size</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-buy"  onclick="buyNow()" >MUA NGAY</button>
+                    <button class="btn btn-cart" onclick="addToCart()">THÊM VÀO GIỎ HÀNG</button>
+
+                </div>
+
+                <!-- Description -->
+                <div class="description-section">
+                    <h2>Mô tả</h2>
+                    <p id="product-description">Thông tin chi tiết sản phẩm sẽ hiển thị ở đây.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="related-products">
+            <h2 class="related-title">SẢN PHẨM LIÊN QUAN</h2>
+            <div class="related-grid"></div>
+        </div>
+    </main>
+
+        <!-- footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Company Info -->
+            <div class="footer-company">
+                <div class="footer-logo">
+                    
+                        <path d="M10 8 C10 6 12 5 14 6 L14 12 C14 14 16 15 18 14 L24 14 C26 14 27 16 26 18 L26 24 C27 26 25 28 23 27 L23 21 C23 19 21 18 19 19 L13 19 C11 19 10 17 11 15 L11 9" stroke="black" fill="none" stroke-width="2"/>
+                    </svg>
+                    <span>THE<br>OFICELOOK</span>
+                </div>
+                <h3>CÔNG TY CỔ PHẦN THỜI KOWLI VIỆT NAM</h3>
+                <p><strong>Hotline:</strong> 1900 1080</p>
+                <p>8:30 - 19:00 tất cả các ngày trong tuần</p>
+                <p><strong>VP Phía Bắc:</strong> Tầng 17 tòa nhà Viwaseen, 48 Phố Tố Hữu, Trung Văn, Nam Từ Liêm, Hà Nội.</p>
+                <p><strong>VP Phía Nam:</strong> 186A Nam Kỳ Khởi Nghĩa, Phường Võ Thị Sáu, Quận 3, TP.HCM</p>
+            </div>
+    
+            <!-- About Section -->
+            <div class="footer-column">
+                <h4>Giới Thiệu The Oficelook</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Hệ thống cửa hàng</a></li>
+                    <li><a href="#">Liên hệ với THE OFICELOOK</a></li>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+    
+            <!-- Customer Support -->
+            <div class="footer-column">
+                <h4>Hỗ Trợ Khách Hàng</h4>
+                <ul>
+                    <li><a href="#">Hỏi đáp</a></li>
+                    <li><a href="#">Chính sách vận chuyển</a></li>
+                    <li><a href="#">Hướng dẫn chọn kích cỡ</a></li>
+                    <li><a href="#">Hướng dẫn thanh toán</a></li>
+                    <li><a href="#">Quy định đổi hàng</a></li>
+                    <li><a href="#">Hướng dẫn đổi hàng</a></li>
+                </ul>
+            </div>
+    
+            <!-- Warranty Policy -->
+            <div class="footer-column">
+                <h4>Chính Sách Bảo Hành</h4>
+                <ul>
+                    <li><a href="#">Chính sách bảo hành online</a></li>
+                    <li><a href="#">Chính sách bảo hành tại shop</a></li>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                </ul>
+            </div>
+    
+            <!-- Connect & Payment -->
+            <div class="footer-column">
+                <h4>Kết Nối</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">▶</a>
+                </div>
+                
+                <div class="payment-methods">
+                    <h5>Phương Thức Thanh Toán</h5>
+                    <div class="payment-icons">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" class="payment-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="payment-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="payment-icon">
+                    </div>
+                </div>
+    
+                <div class="certification">
+                    <!-- <img src="https://via.placeholder.com/120x50/0066CC/FFFFFF?text=BỘ+CÔNG+THƯƠNG" alt="Certification"> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        // Lấy sản phẩm từ localStorage khi vào trang
+        const currentProduct = JSON.parse(localStorage.getItem('currentProduct'));
+        
+        if (currentProduct) {
+          // Cập nhật ảnh chính + thumbnail (nếu có nhiều ảnh thì thêm sau)
+          document.getElementById('mainImage').src = currentProduct.img;
+        
+          // Cập nhật thông tin
+          document.querySelector('.product-info h1').textContent = currentProduct.ten;
+          document.querySelector('.product-code').textContent = 'Mã SP: ' + currentProduct.id.toUpperCase();
+          document.querySelector('.price').textContent = currentProduct.gia.toLocaleString("vi-VN") + ' đ';
+          document.getElementById('product-description').textContent = currentProduct.moTa;
+        
+          // Cập nhật thumbnail đầu tiên active (nếu có gallery)
+          const firstThumb = document.querySelector('.thumbnail');
+          if (firstThumb) firstThumb.classList.add('active');
+        } else {
+          document.body.innerHTML = "<h1 class='text-center text-3xl mt-20'>Không tìm thấy sản phẩm!</h1>";
+        }
+
+        
+        </script>
+<script src="script.js"></script>
+</body>
+</html>

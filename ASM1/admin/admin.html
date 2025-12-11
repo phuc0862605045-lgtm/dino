@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Quản lý Sản phẩm & Danh mục</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#f5f5f5; }
+        .admin-container { max-width:1200px; margin:0 auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+        h1,h2 { color:#333; }
+        form { margin-bottom:20px; padding:15px; background:#fafafa; border:1px solid #ddd; border-radius:5px; }
+        label { display:block; margin:10px 0 5px; }
+        input[type=text], input[type=number], select, textarea { width:100%; padding:8px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; }
+        textarea { resize: vertical; }
+        button { margin-top:10px; padding:10px 20px; background:#007bff; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+        button:hover { background:#f0f1f3; }
+        .product-list, #categoryList { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+        .product-card { border:1px solid #868181; border-radius:5px; padding:10px; width:200px; background:#fff; position:relative; }
+        .product-card img { width:100%; height:200px; object-fit:cover; border-radius:4px; }
+        .product-name { font-weight:bold; margin-top:5px; }
+        .product-price { color:#f00; margin:5px 0; }
+        .product-card button { background:#69706c; margin:2px 0; }
+        .product-card button:nth-child(3) { background:#dc3545; }
+        #categoryList li { list-style:none; margin:5px 0; }
+        #categoryList button { margin-left:5px; }
+        .controls { display:flex; gap:10px; margin-bottom:10px; }
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <h1>Quản lý Sản phẩm & Danh mục</h1>
+
+    <!-- Search & Filter -->
+    <div class="controls">
+        <input type="text" id="searchProduct" placeholder="Tìm sản phẩm...">
+        <select id="filterCategory">
+            <option value="">Tất cả danh mục</option>
+        </select>
+        <select id="sortProduct">
+            <option value="">Sắp xếp</option>
+            <option value="asc">Giá tăng dần</option>
+            <option value="desc">Giá giảm dần</option>
+            <option value="name">Tên A-Z</option>
+        </select>
+    </div>
+
+    <!-- Form thêm/sửa sản phẩm -->
+    <form id="productForm">
+        <h2>Thêm / Sửa sản phẩm</h2>
+        <input type="hidden" id="productId">
+        <label>Tên sản phẩm:</label>
+        <input type="text" id="productName" required>
+        <label>Giá:</label>
+        <input type="number" id="productPrice" required>
+        <label>Danh mục:</label>
+        <select id="productCategory" required></select>
+        <label>Hình ảnh:</label>
+        <input type="file" id="productImg" accept="image/*">
+        <label>Mô tả:</label>
+        <textarea id="productDesc"></textarea>
+        <button type="submit">Lưu sản phẩm</button>
+    </form>
+
+    <!-- Danh sách sản phẩm -->
+    <h2>Danh sách sản phẩm</h2>
+    <div id="productList" class="product-list"></div>
+
+    <!-- Form quản lý danh mục -->
+    <form id="categoryForm">
+        <h2>Thêm / Sửa Danh mục</h2>
+        <input type="hidden" id="categoryId">
+        <label>Tên danh mục:</label>
+        <input type="text" id="categoryName" required>
+        <button type="submit">Lưu danh mục</button>
+    </form>
+
+    <h2>Danh sách danh mục</h2>
+    <ul id="categoryList"></ul>
+</div>
+
+<script>
+const defaultProducts = [
+    { id: 'p001', ten: "Áo sơ mi trắng", img: "./img/ao_so_mi (1).jpg", gia: 199000, desc: "Áo sơ mi trắng cơ bản", category: "a" },
+    { id: 'p002', ten: "Quần tây đen", img: "./img/ao (11).png", gia: 149000, desc: "Quần tây đen", category: "b" },
+    { id: 'p003', ten: "Mũ nón thời trang", img: "./img/mu.png", gia: 99000, desc: "Phụ kiện nón", category: "c" }
+];
+const defaultCategories = [
+    { id: 'a', name: "Áo" },
+    { id: 'b', name: "Quần" },
+    { id: 'c', name: "Phụ kiện" }
+];
+
+const PRODUCTS_KEY = "allProducts";
+const CATEGORIES_KEY = "allCategories";
+
+function initStorage(){
+    if(!localStorage.getItem(PRODUCTS_KEY)) localStorage.setItem(PRODUCTS_KEY, JSON.stringify(defaultProducts));
+    if(!localStorage.getItem(CATEGORIES_KEY)) localStorage.setItem(CATEGORIES_KEY, JSON.stringify(defaultCategories));
+}
+
+function getProducts(){ return JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []; }
+function getCategories(){ return JSON.parse(localStorage.getItem(CATEGORIES_KEY)) || []; }
+function saveProducts(products){ localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products)); }
+function saveCategories(categories){ localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories)); }
+
+function renderProducts(list=getProducts()){
+    const container = document.getElementById("productList");
+    container.innerHTML = list.map(p=>`
+        <div class="product-card">
+            <img src="${p.img}" alt="${p.ten}">
+            <div class="product-name">${p.ten}</div>
+            <div class="product-price">${p.gia.toLocaleString()} đ</div>
+            <button onclick="editProduct('${p.id}')">Sửa</button>
+            <button onclick="deleteProduct('${p.id}')">Xóa</button>
+        </div>
+    `).join('');
+}
+
+function renderCategories(){
+    const ul = document.getElementById("categoryList");
+    const categories = getCategories();
+    ul.innerHTML = categories.map(c=>`
+        <li>${c.name} 
+            <button onclick="editCategory('${c.id}')">Sửa</button>
+            <button onclick="deleteCategory('${c.id}')">Xóa</button>
+        </li>
+    `).join('');
+    // cập nhật select danh mục
+    const select = document.getElementById("productCategory");
+    select.innerHTML = categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+    const filter = document.getElementById("filterCategory");
+    filter.innerHTML = `<option value="">Tất cả danh mục</option>`+categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+}
+
+// Thêm / Sửa sản phẩm
+document.getElementById("productForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const idField = document.getElementById("productId");
+    const name = document.getElementById("productName").value;
+    const price = Number(document.getElementById("productPrice").value);
+    const category = document.getElementById("productCategory").value;
+    const desc = document.getElementById("productDesc").value;
+    const imgFile = document.getElementById("productImg").files[0];
+
+    const products = getProducts();
+    const reader = new FileReader();
+    reader.onload = function(){
+        const imgSrc = imgFile ? reader.result : (idField.value ? products.find(p=>p.id===idField.value).img : '');
+        if(idField.value){
+            const index = products.findIndex(p=>p.id===idField.value);
+            if(index!==-1){
+                products[index]={...products[index], ten:name, gia:price, category, desc, img:imgSrc};
+            }
+        } else {
+            products.push({id:"p"+Date.now(), ten:name, gia:price, category, desc, img:imgSrc});
+        }
+        saveProducts(products);
+        renderProducts();
+        this.reset();
+        idField.value="";
+    }
+    if(imgFile) reader.readAsDataURL(imgFile); else reader.onload();
+});
+
+// CRUD sản phẩm
+function deleteProduct(id){
+    let products = getProducts();
+    products = products.filter(p=>p.id!==id);
+    saveProducts(products);
+    renderProducts();
+}
+function editProduct(id){
+    const p = getProducts().find(p=>p.id===id);
+    if(!p) return;
+    document.getElementById("productId").value = p.id;
+    document.getElementById("productName").value = p.ten;
+    document.getElementById("productPrice").value = p.gia;
+    document.getElementById("productCategory").value = p.category;
+    document.getElementById("productDesc").value = p.desc;
+}
+
+// CRUD danh mục
+document.getElementById("categoryForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const idField = document.getElementById("categoryId");
+    const name = document.getElementById("categoryName").value;
+    const categories = getCategories();
+    if(idField.value){
+        const index = categories.findIndex(c=>c.id===idField.value);
+        if(index!==-1) categories[index].name = name;
+    } else {
+        const newId = "c"+Date.now();
+        categories.push({id:newId, name});
+    }
+    saveCategories(categories);
+    renderCategories();
+    this.reset();
+    idField.value="";
+});
+function deleteCategory(id){
+    let categories = getCategories();
+    categories = categories.filter(c=>c.id!==id);
+    saveCategories(categories);
+    renderCategories();
+}
+function editCategory(id){
+    const c = getCategories().find(c=>c.id===id);
+    if(!c) return;
+    document.getElementById("categoryId").value=c.id;
+    document.getElementById("categoryName").value=c.name;
+}
+
+// Search, filter, sort
+document.getElementById("searchProduct").addEventListener("input", function(){
+    const term = this.value.toLowerCase();
+    const filtered = getProducts().filter(p=>p.ten.toLowerCase().includes(term));
+    renderProducts(filtered);
+});
+document.getElementById("filterCategory").addEventListener("change", function(){
+    const cat = this.value;
+    const filtered = cat ? getProducts().filter(p=>p.category===cat) : getProducts();
+    renderProducts(filtered);
+});
+document.getElementById("sortProduct").addEventListener("change", function(){
+    const val = this.value;
+    let list = getProducts();
+    if(val==='asc') list.sort((a,b)=>a.gia-b.gia);
+    if(val==='desc') list.sort((a,b)=>b.gia-a.gia);
+    if(val==='name') list.sort((a,b)=>a.ten.localeCompare(b.ten));
+    renderProducts(list);
+});
+
+// Khởi tạo
+initStorage();
+renderCategories();
+renderProducts();
+</script>
+</body>
+</html>

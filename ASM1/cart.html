@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" href="style.css">
+  <style>
+    /* Reset cơ bản */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Main Cart Page */
+.cart-page {
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.header {
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #111;
+}
+
+/* Cart Table */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.cart-header th {
+    background-color: #e0e0e0;
+    color: #111;
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.cart-table tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: background 0.3s;
+}
+
+.cart-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.cart-table td {
+    padding: 15px;
+    vertical-align: middle;
+}
+
+/* Hình sản phẩm */
+.cart-table img {
+    width: 80px;       /* tăng kích thước hình */
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 15px 30px; /* to hơn */
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-weight: 500;
+}
+
+.btn-continue {
+    background-color: #f0f0f0;
+    color: #333;
+    margin-right: 15px;
+}
+
+.btn-continue:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-order {
+    background-color: #333;
+    color: #fff;
+}
+
+.btn-order:hover {
+    background-color: #111;
+}
+
+/* Cart Summary */
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.action-buttons {
+    margin-bottom: 20px;
+}
+
+.summary-info {
+    min-width: 250px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.summary-label {
+    font-weight: 500;
+}
+
+.summary-value, .grand-total {
+    font-weight: 600;
+    color: #111;
+    font-size: 18px;
+}
+
+.grand-total {
+    font-size: 20px;
+}
+
+  </style>
+</head>
+<body>
+       <!-- Header -->
+       <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+               <img src="./img/logo.png" alt="">
+                </svg>
+                
+            </a>
+            
+            <nav>
+                
+                <a href="index.html">TRANG CHỦ</a>
+                <a href="t-shisrt.html">ÁO</a>
+                <a href="trousers.html">QUẦN</a>
+                <a href="blog.html">BÀI VIẾT</a>
+                <a href="about.html">VỀ CHÚNG TÔI</a>
+                <a href="#">BÀI VIẾT </a>
+                <a href="#">LIÊN HỆ</a>
+            </nav>
+
+            <div class="header-right">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" placeholder="Bạn đang tìm gì ?">
+                </div>
+                
+                <div class="icon-buttons">
+                        <!-- <button aria-label="Yêu thích">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button> -->
+                    <button aria-label="Tài khoản">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                        </svg>
+                    </button>
+                    <button aria-label="Giỏ hàng">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="cart-page">
+        <div class="container">
+            <div class="header">Giỏ hàng</div>
+    
+            <table class="cart-table">
+                <thead class="cart-header">
+                    <tr>
+                        <th>SẢN PHẨM</th>
+                        <th style="text-align: center;">SỐ LƯỢNG</th>
+                        <th style="text-align: right;">ĐƠN GIÁ</th>
+                        <th style="text-align: right;">TỔNG CỘNG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+    
+            <div class="cart-summary">
+                <div class="action-buttons">
+                    <a href="index.html" class="btn btn-continue" style="text-decoration: none;">Tiếp tục mua hàng</a>
+                    <button class="btn btn-order" onclick="goToCheckout()">Thanh toán</button>
+                </div>
+                
+                <div class="summary-info">
+                    <div class="summary-row">
+                        <span class="summary-label">Tổng số sản phẩm:</span>
+                        <span class="summary-value" id="totalItems">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Tạm tính:</span>
+                        <span class="grand-total" id="grandTotal">0đ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+  
+   
+    
+    <!-- footer -->
+<footer class="footer">
+    <div class="footer-container">
+        <!-- Company Info -->
+        <div class="footer-company">
+            <div class="footer-logo">
+                
+                    <path d="M10 8 C10 6 12 5 14 6 L14 12 C14 14 16 15 18 14 L24 14 C26 14 27 16 26 18 L26 24 C27 26 25 28 23 27 L23 21 C23 19 21 18 19 19 L13 19 C11 19 10 17 11 15 L11 9" stroke="black" fill="none" stroke-width="2"/>
+                </svg>
+                <span>THE<br>OFICELOOK</span>
+            </div>
+            <h3>CÔNG TY CỔ PHẦN THỜI KOWLI VIỆT NAM</h3>
+            <p><strong>Hotline:</strong> 1900 1080</p>
+            <p>8:30 - 19:00 tất cả các ngày trong tuần</p>
+            <p><strong>VP Phía Bắc:</strong> Tầng 17 tòa nhà Viwaseen, 48 Phố Tố Hữu, Trung Văn, Nam Từ Liêm, Hà Nội.</p>
+            <p><strong>VP Phía Nam:</strong> 186A Nam Kỳ Khởi Nghĩa, Phường Võ Thị Sáu, Quận 3, TP.HCM</p>
+        </div>
+
+        <!-- About Section -->
+        <div class="footer-column">
+            <h4>Giới Thiệu The Oficelook</h4>
+            <ul>
+                <li><a href="#">Giới thiệu</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Hệ thống cửa hàng</a></li>
+                <li><a href="#">Liên hệ với THE OFICELOOK</a></li>
+                <li><a href="#">Chính sách bảo mật</a></li>
+            </ul>
+        </div>
+
+        <!-- Customer Support -->
+        <div class="footer-column">
+            <h4>Hỗ Trợ Khách Hàng</h4>
+            <ul>
+                <li><a href="#">Hỏi đáp</a></li>
+                <li><a href="#">Chính sách vận chuyển</a></li>
+                <li><a href="#">Hướng dẫn chọn kích cỡ</a></li>
+                <li><a href="#">Hướng dẫn thanh toán</a></li>
+                <li><a href="#">Quy định đổi hàng</a></li>
+                <li><a href="#">Hướng dẫn đổi hàng</a></li>
+            </ul>
+        </div>
+
+        <!-- Warranty Policy -->
+        <div class="footer-column">
+            <h4>Chính Sách Bảo Hành</h4>
+            <ul>
+                <li><a href="#">Chính sách bảo hành online</a></li>
+                <li><a href="#">Chính sách bảo hành tại shop</a></li>
+                <li><a href="#">Chính sách bảo mật</a></li>
+                <li><a href="#">Chính sách đổi trả</a></li>
+            </ul>
+        </div>
+
+        <!-- Connect & Payment -->
+        <div class="footer-column">
+            <h4>Kết Nối</h4>
+            <div class="social-icons">
+                <a href="#" class="social-icon">f</a>
+                <a href="#" class="social-icon">📷</a>
+                <a href="#" class="social-icon">▶</a>
+            </div>
+            
+            <div class="payment-methods">
+                <h5>Phương Thức Thanh Toán</h5>
+                <div class="payment-icons">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" class="payment-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="payment-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" class="payment-icon">
+                </div>
+            </div>
+
+            <div class="certification">
+                <!-- <img src="https://via.placeholder.com/120x50/0066CC/FFFFFF?text=BỘ+CÔNG+THƯƠNG" alt="Certification"> -->
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        function goToCheckout() {
+    const cart = getCart();
+    if (cart.length === 0) {
+        alert('Giỏ hàng trống!');
+        return;
+    }
+    window.location.href = 'checkout.html';
+}
+
+        function updateQuantity(button, change) {
+            const row = button.closest('tr');
+            const input = row.querySelector('.quantity-input');
+            const priceCell = row.querySelector('.price');
+            const totalCell = row.querySelector('.total');
+            
+            let currentQty = parseInt(input.value);
+            let newQty = currentQty + change;
+            
+            if (newQty < 1) newQty = 1;
+            
+            input.value = newQty;
+            
+            const unitPrice = 550000;
+            const newTotal = unitPrice * newQty;
+            
+            totalCell.textContent = formatCurrency(newTotal);
+            
+            updateCartTotal();
+        }
+
+        function formatCurrency(amount) {
+            return amount.toLocaleString('vi-VN') + 'đ';
+        }
+
+        function updateCartTotal() {
+            const rows = document.querySelectorAll('.cart-item');
+            let totalItems = 0;
+            let grandTotal = 0;
+            
+            rows.forEach(row => {
+                const qty = parseInt(row.querySelector('.quantity-input').value);
+                const total = parseInt(row.querySelector('.total').textContent.replace(/\D/g, ''));
+                
+                totalItems += qty;
+                grandTotal += total;
+            });
+            
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('grandTotal').textContent = formatCurrency(grandTotal);
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
