@@ -1,0 +1,106 @@
+-- ========================
+-- 1. Customer (Khách hàng)
+-- ========================
+CREATE TABLE Customers (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Phone VARCHAR(20),
+    Email VARCHAR(255) UNIQUE,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================
+-- 2. Table (Bàn)
+-- ========================
+CREATE TABLE Tables (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    TableNumber VARCHAR(50) UNIQUE,
+    Capacity INT,
+    Status VARCHAR(50) -- available / occupied / reserved
+);
+
+-- ========================
+-- 3. Buffet Packages (Gói buffet)
+-- ========================
+CREATE TABLE BuffetPackages (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Price DECIMAL(10,2),
+    Description TEXT,
+    IsActive BOOLEAN DEFAULT TRUE
+);
+
+-- ========================
+-- 4. Booking (Đặt bàn)
+-- ========================
+CREATE TABLE Bookings (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerId INT,
+    BookingDate DATETIME, -- ngày giờ ăn
+    NumberOfPeople INT,
+    Status VARCHAR(50), -- pending / confirmed / cancelled
+    Note TEXT,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (CustomerId) REFERENCES Customers(Id)
+);
+
+-- ========================
+-- 5. Booking Table (nhiều bàn cho 1 booking)
+-- ========================
+CREATE TABLE BookingTables (
+    BookingId INT,
+    TableId INT,
+    PRIMARY KEY (BookingId, TableId),
+    FOREIGN KEY (BookingId) REFERENCES Bookings(Id) ON DELETE CASCADE,
+    FOREIGN KEY (TableId) REFERENCES Tables(Id)
+);
+
+-- ========================
+-- 6. Booking Buffet (chọn gói buffet)
+-- ========================
+CREATE TABLE BookingBuffets (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    BookingId INT,
+    BuffetPackageId INT,
+    Quantity INT, -- số người ăn gói này
+    Price DECIMAL(10,2),
+    FOREIGN KEY (BookingId) REFERENCES Bookings(Id) ON DELETE CASCADE,
+    FOREIGN KEY (BuffetPackageId) REFERENCES BuffetPackages(Id)
+);
+
+-- ========================
+-- 7. Payments (Thanh toán)
+-- ========================
+CREATE TABLE Payments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    BookingId INT,
+    Amount DECIMAL(10,2),
+    PaymentMethod VARCHAR(50), -- cash / momo / vnpay
+    Status VARCHAR(50), -- paid / unpaid
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (BookingId) REFERENCES Bookings(Id)
+);
+
+-- ========================
+-- 8. Staff (Nhân viên)
+-- ========================
+CREATE TABLE Staffs (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Phone VARCHAR(20),
+    Role VARCHAR(50),
+    IsActive BOOLEAN DEFAULT TRUE
+);
+
+-- ========================
+-- 9. Check-in (khách tới ăn)
+-- ========================
+CREATE TABLE Checkins (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    BookingId INT,
+    CheckinTime DATETIME,
+    CheckoutTime DATETIME,
+    StaffId INT,
+    FOREIGN KEY (BookingId) REFERENCES Bookings(Id),
+    FOREIGN KEY (StaffId) REFERENCES Staffs(Id)
+);
