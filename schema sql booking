@@ -1,0 +1,276 @@
+-- ========================
+-- 1. RoomType
+-- ========================
+CREATE TABLE RoomType (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Code VARCHAR(100),
+    AdultQuantity INT,
+    ChildQuantity INT,
+    SingleBedQuantity INT,
+    DoubleBedQuantity INT,
+    Width DECIMAL(10,2),
+    Height DECIMAL(10,2),
+    HourlyPrice DECIMAL(10,2),
+    DailyPrice DECIMAL(10,2),
+    IsActive BOOLEAN,
+    Description TEXT
+);
+
+-- ========================
+-- 2. Floor
+-- ========================
+CREATE TABLE Floor (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255)
+);
+
+-- ========================
+-- 3. Room
+-- ========================
+CREATE TABLE Room (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    RoomTypeId INT,
+    FloorId INT,
+    Name VARCHAR(100) UNIQUE,
+    Status VARCHAR(50),
+    FOREIGN KEY (RoomTypeId) REFERENCES RoomType(Id),
+    FOREIGN KEY (FloorId) REFERENCES Floor(Id)
+);
+
+-- ========================
+-- 4. EquipmentCategories
+-- ========================
+CREATE TABLE EquipmentCategories (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100)
+);
+
+-- ========================
+-- 5. Equipments
+-- ========================
+CREATE TABLE Equipments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    EquipmentCategoryId INT,
+    ImportPrice DECIMAL(10,2),
+    FOREIGN KEY (EquipmentCategoryId) REFERENCES EquipmentCategories(Id)
+);
+
+-- ========================
+-- 6. RoomEquipment (Many-to-Many)
+-- ========================
+CREATE TABLE RoomEquipment (
+    RoomTypeId INT,
+    EquipmentID INT,
+    Quantity INT,
+    PRIMARY KEY (RoomTypeId, EquipmentID),
+    FOREIGN KEY (RoomTypeId) REFERENCES RoomType(Id),
+    FOREIGN KEY (EquipmentID) REFERENCES Equipments(Id)
+);
+
+-- ========================
+-- 7. SystemSettings
+-- ========================
+CREATE TABLE SystemSettings (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    SettingKey VARCHAR(255),
+    SettingValue VARCHAR(255),
+    Description TEXT
+);
+
+-- ========================
+-- 8. Customer
+-- ========================
+CREATE TABLE Customer (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    PhoneNumber VARCHAR(20),
+    AccountId INT NULL,
+    Country VARCHAR(100),
+    Email VARCHAR(255) UNIQUE
+);
+
+-- ========================
+-- 9. Role
+-- ========================
+CREATE TABLE Role (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100)
+);
+
+-- ========================
+-- 10. Staff
+-- ========================
+CREATE TABLE Staff (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    RoleId INT,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    PhoneNumber VARCHAR(20),
+    Email VARCHAR(255),
+    IsActive BOOLEAN,
+    Password VARCHAR(255),
+    FOREIGN KEY (RoleId) REFERENCES Role(Id)
+);
+
+-- ========================
+-- 11. RoleClaim
+-- ========================
+CREATE TABLE RoleClaim (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    ClaimName VARCHAR(255),
+    ClaimValue VARCHAR(255),
+    RoleId INT,
+    FOREIGN KEY (RoleId) REFERENCES Role(Id)
+);
+
+-- ========================
+-- 12. ServiceGroup
+-- ========================
+CREATE TABLE ServiceGroup (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    ServiceName VARCHAR(255)
+);
+
+-- ========================
+-- 13. Service
+-- ========================
+CREATE TABLE Service (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    GroupId INT,
+    UnitPrice DECIMAL(10,2),
+    Unit VARCHAR(50),
+    FOREIGN KEY (GroupId) REFERENCES ServiceGroup(Id)
+);
+
+-- ========================
+-- 14. Booking
+-- ========================
+CREATE TABLE Booking (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerId INT,
+    BookingDate DATETIME,
+    StaffId INT NULL,
+    TotalServiceAmount DECIMAL(10,2),
+    TotalRoomAmount DECIMAL(10,2),
+    SurchargeAmount DECIMAL(10,2),
+    FinalAmount DECIMAL(10,2),
+    Status VARCHAR(50),
+    FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
+    FOREIGN KEY (StaffId) REFERENCES Staff(Id)
+);
+
+-- ========================
+-- 15. BookingDetail
+-- ========================
+CREATE TABLE BookingDetail (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    RoomId INT,
+    BookingId INT,
+    CheckinDate DATETIME,
+    CheckoutDate DATETIME,
+    HourlyPrice DECIMAL(10,2),
+    DailyPrice DECIMAL(10,2),
+    ServiceAmount DECIMAL(10,2),
+    SurchargeAmount DECIMAL(10,2),
+    FOREIGN KEY (RoomId) REFERENCES Room(Id),
+    FOREIGN KEY (BookingId) REFERENCES Booking(Id)
+);
+
+-- ========================
+-- 16. ServiceUsage
+-- ========================
+CREATE TABLE ServiceUsage (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    BookingDetailId INT,
+    ServiceId INT,
+    Quantity INT,
+    UnitPrice DECIMAL(10,2),
+    CreatedAt DATETIME,
+    UpdatedAt DATETIME,
+    FOREIGN KEY (BookingDetailId) REFERENCES BookingDetail(Id),
+    FOREIGN KEY (ServiceId) REFERENCES Service(Id)
+);
+
+-- ========================
+-- 17. MaintenanceTicket
+-- ========================
+CREATE TABLE MaintenanceTicket (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    RoomId INT,
+    EquipmentId INT NULL,
+    ReportedDate DATE,
+    IssueDescription TEXT,
+    TechnicianNote TEXT,
+    Status VARCHAR(50),
+    RepairCost DECIMAL(10,2),
+    ReportedByStaffId INT,
+    TechnicianId INT,
+    CreatedAt DATETIME,
+    UpdatedAt DATETIME,
+    FOREIGN KEY (RoomId) REFERENCES Room(Id),
+    FOREIGN KEY (EquipmentId) REFERENCES Equipments(Id),
+    FOREIGN KEY (ReportedByStaffId) REFERENCES Staff(Id),
+    FOREIGN KEY (TechnicianId) REFERENCES Staff(Id)
+);
+
+-- ========================
+-- 18. RoomTypeImage
+-- ========================
+CREATE TABLE RoomTypeImage (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    RoomTypeId INT,
+    ImageUrl VARCHAR(255),
+    `Order` INT,
+    FOREIGN KEY (RoomTypeId) REFERENCES RoomType(Id)
+);
+
+-- ========================
+-- 19. Amenities
+-- ========================
+CREATE TABLE Amenities (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Icon VARCHAR(255)
+);
+
+-- ========================
+-- 20. RoomTypeAmenities
+-- ========================
+CREATE TABLE RoomTypeAmenities (
+    RoomTypeId INT,
+    AmenityId INT,
+    PRIMARY KEY (RoomTypeId, AmenityId),
+    FOREIGN KEY (RoomTypeId) REFERENCES RoomType(Id),
+    FOREIGN KEY (AmenityId) REFERENCES Amenities(Id)
+);
+
+-- ========================
+-- 21. Payments
+-- ========================
+CREATE TABLE Payments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    BookingId INT,
+    Amount DECIMAL(10,2),
+    PaymentMethod VARCHAR(100),
+    Note TEXT,
+    TransactionCode VARCHAR(255),
+    StaffId INT NULL,
+    CreatedAt DATETIME,
+    UpdatedAt DATETIME,
+    FOREIGN KEY (BookingId) REFERENCES Booking(Id),
+    FOREIGN KEY (StaffId) REFERENCES Staff(Id)
+);
+
+-- ========================
+-- 22. SurchargePolicies
+-- ========================
+CREATE TABLE SurchargePolicies (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    PolicyType VARCHAR(100),
+    HourMark DECIMAL(10,2),
+    Price DECIMAL(10,2)
+);
